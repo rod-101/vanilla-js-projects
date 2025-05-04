@@ -1,4 +1,3 @@
-
 let correctAnswer = 0;
 let headContainer = document.getElementById('head-container');
 
@@ -29,6 +28,7 @@ function createOneDigitProblem(loop) {
 }
 
 function createSession() {
+    startTimer();
     document.getElementById('start').disabled = true;
     //a session has 10 successive problems
     let loop = 5;
@@ -42,7 +42,9 @@ function createSession() {
             loop--;
             console.log('tries left: ' + loop);
             if(loop === 0) {
+                clearTimeout(timerID)
                 document.getElementById('enter').style.pointerEvents = "none";
+                document.getElementById('delete').style.pointerEvents = "none";
                 return;
             }
             correctAnswer = createOneDigitProblem();
@@ -53,11 +55,26 @@ function createSession() {
     })
 }
 
-// function enter() {
-//     let userAnswer = document.getElementById('problem').innerHTML;
-//     if(userAnswer == correctAnswer) {
-//         console.log(userAnswer + ' is correct!');
-//         return true;
-//     } 
+let sec = 0;
+let min = 0;
+let timerID;
+function startTimer() {
+    console.log(sec)
+
+    let timer = document.getElementById('timer');
+
+    if(sec > 59) {
+        sec = 0;
+        min++;
+    }
+
+    if(sec < 10) {
+        timer.innerHTML = min + ':' + '0' + sec;
+    } else {
+        timer.innerHTML = min + ':' + sec;
+    }
+
     
-// }
+    sec++;
+    timerID = setTimeout(startTimer, 1000);
+}

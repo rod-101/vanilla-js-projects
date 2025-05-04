@@ -1,3 +1,4 @@
+
 let correctAnswer = 0;
 let headContainer = document.getElementById('head-container');
 
@@ -28,8 +29,9 @@ function createOneDigitProblem(loop) {
 }
 
 function createSession() {
+    document.getElementById('start').disabled = true;
     //a session has 10 successive problems
-    let loop = 10;
+    let loop = 5;
     correctAnswer = createOneDigitProblem();
 
     //the 'enter' key is used to check the answer
@@ -38,7 +40,9 @@ function createSession() {
         let userAnswer = document.getElementById('head-container').innerHTML;
         if(userAnswer == correctAnswer) {
             loop--;
+            console.log('tries left: ' + loop);
             if(loop === 0) {
+                document.getElementById('enter').style.pointerEvents = "none";
                 return;
             }
             correctAnswer = createOneDigitProblem();

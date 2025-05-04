@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solve the Problems</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <div id="main-container">
+        <!--contains the screen and shows the user's input-->
+        <div id="head-container">a</div>
+
+        <div id="body-container">
+            <!--contains the screen that flashes the math problems-->
+            <div id="problem">problem goes here</div>
+
+            <!--contains the number keys-->
+            <div >
+                <div class="key">1</div>
+                <div class="key">2</div>
+                <div class="key">3</div>
+                <div class="key">4</div>
+                <div class="key">5</div>
+                <div class="key">6</div>
+                <div class="key">7</div>
+                <div class="key">8</div>
+                <div class="key">9</div>
+                <div class="key">0</div>
+                <div onclick="deleteNum()">delete</div>
+                <div id="enter">enter</div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="createSession()">Start</button>
+    
+    <script src="script.js"></script>
+</body>
+</html>

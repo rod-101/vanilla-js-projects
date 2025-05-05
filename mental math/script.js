@@ -54,10 +54,12 @@ function handleEnterClick() {
         loop--;
         console.log('tries left: ' + loop);
         if(loop < 1) {
-            clearTimeout(timerID);
-            document.getElementById('time').innerHTML = timer.innerHTML;
             enterKey.style.pointerEvents = "none";
             deleteKey.style.pointerEvents = "none";
+            clearTimeout(timerID);
+            console.log("counter inside loop: " + counter);
+            recordBestTime();
+            document.getElementById('time').innerHTML = timer.innerHTML;
             counter = 0;
             min = 0;
             headContainer.innerHTML = "";
@@ -76,13 +78,12 @@ document.getElementById('enter').addEventListener('click', handleEnterClick)
 
 let counter = 0;
 function startTimer() {
-    
+    //calculation of time
     if (counter < 60) {
         sec = counter;
     } else {
         sec = counter % 60;
     }
-
     if(counter % 60 == 0){
         min = counter / 60;
     }
@@ -96,4 +97,39 @@ function startTimer() {
     
     counter++;
     timerID = setTimeout(startTimer, 1000);
+}
+
+let bestTime = 0;
+let bestTimeContainer = document.getElementById('bestTime');
+function recordBestTime() {
+    let seconds = 0;
+    let minutes = 0;
+    console.log("counter inside function: " + counter);
+    let time = counter;
+
+    if(bestTime == 0) {
+        bestTimeContainer.innerHTML = `${time}`
+        bestTime = time;
+    } else {
+        if(time < bestTime) { //there is a problem here
+            bestTime = time;
+        }
+    
+        //formatting the best time to be displayed on the dialog
+        if (bestTime < 60) {
+            seconds = bestTime;
+        } else {
+            seconds = bestTime % 60;
+        }
+        if(bestTime % 60 == 0){
+            minutes = bestTime / 60;
+        }
+
+        //format of best time on screen
+        if(seconds < 10) {
+            bestTimeContainer.innerHTML = minutes + ':' + '0' + seconds;
+        } else {
+            bestTimeContainer.innerHTML = minutes + ':' + seconds;
+        }        
+    }
 }

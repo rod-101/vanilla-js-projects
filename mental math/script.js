@@ -1,3 +1,4 @@
+let loop = 0;
 let sec = 0;
 let min = 0;
 let timerID;
@@ -38,36 +39,40 @@ function createOneDigitProblem(loop) {
 }
 
 function createSession() {
+    loop = 5;
     startTimer();
+    //enable and disable rightful keys
     enterKey.style.pointerEvents = "auto";
-    deleteKey.style.pointerEvents = "auto";;
+    deleteKey.style.pointerEvents = "auto";
     document.getElementById('start').disabled = true;
-    //a session has 10 successive problems
-    let loop = 5;
     correctAnswer = createOneDigitProblem();
-
-    //the 'enter' key is used to check the answer
-    //it is also used to update the loop and give feedback to user
-    document.getElementById('enter').addEventListener('click', () => {
-        let userAnswer = document.getElementById('head-container').innerHTML;
-        if(userAnswer == correctAnswer) {
-            loop--;
-            console.log('tries left: ' + loop);
-            if(loop === 0) {
-                clearTimeout(timerID)
-                document.getElementById('time').innerHTML = timer.innerHTML;
-                document.getElementById('scoreDialog').showModal();
-                enterKey.style.pointerEvents = "none";
-                deleteKey.style.pointerEvents = "none";
-                return;
-            }
-            correctAnswer = createOneDigitProblem();
-            headContainer.innerHTML = '';
-        } else {
-            console.log(userAnswer + " is wrong.")
-        }
-    })
 }
+
+function handleEnterClick() {
+    let userAnswer = document.getElementById('head-container').innerHTML;
+    if(userAnswer == correctAnswer) {
+        loop--;
+        console.log('tries left: ' + loop);
+        if(loop < 1) {
+            clearTimeout(timerID);
+            document.getElementById('time').innerHTML = timer.innerHTML;
+            enterKey.style.pointerEvents = "none";
+            deleteKey.style.pointerEvents = "none";
+            sec = 0;
+            min = 0;
+            headContainer.innerHTML = "";
+            
+            document.getElementById('scoreDialog').showModal();                
+            return;
+        }
+        correctAnswer = createOneDigitProblem();
+        headContainer.innerHTML = '';
+    } else {
+        console.log(userAnswer + " is wrong.")
+    }
+}
+
+document.getElementById('enter').addEventListener('click', handleEnterClick)
 
 function startTimer() {
     if(sec > 59) {

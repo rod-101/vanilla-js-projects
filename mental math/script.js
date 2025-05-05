@@ -1,8 +1,17 @@
-let correctAnswer = 0;
+let sec = 0;
+let min = 0;
+let timerID;
 let headContainer = document.getElementById('head-container');
 let timer = document.getElementById('timer');
-
 let keys = document.getElementsByClassName('key');
+let enterKey = document.getElementById("enter");
+let deleteKey = document.getElementById("delete");
+
+document.addEventListener("DOMContentLoaded", function () {
+    enterKey.style.pointerEvents = "none"
+    deleteKey.style.pointerEvents = "none"
+})
+
 Array.from(keys).forEach(el => {
     el.addEventListener('click', () => {
         headContainer.innerHTML += el.innerHTML;
@@ -30,6 +39,8 @@ function createOneDigitProblem(loop) {
 
 function createSession() {
     startTimer();
+    enterKey.style.pointerEvents = "auto";
+    deleteKey.style.pointerEvents = "auto";;
     document.getElementById('start').disabled = true;
     //a session has 10 successive problems
     let loop = 5;
@@ -46,8 +57,8 @@ function createSession() {
                 clearTimeout(timerID)
                 document.getElementById('time').innerHTML = timer.innerHTML;
                 document.getElementById('scoreDialog').showModal();
-                document.getElementById('enter').style.pointerEvents = "none";
-                document.getElementById('delete').style.pointerEvents = "none";
+                enterKey.style.pointerEvents = "none";
+                deleteKey.style.pointerEvents = "none";
                 return;
             }
             correctAnswer = createOneDigitProblem();
@@ -58,9 +69,6 @@ function createSession() {
     })
 }
 
-let sec = 0;
-let min = 0;
-let timerID;
 function startTimer() {
     if(sec > 59) {
         sec = 0;

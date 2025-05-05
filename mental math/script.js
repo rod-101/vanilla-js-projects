@@ -1,5 +1,6 @@
 let correctAnswer = 0;
 let headContainer = document.getElementById('head-container');
+let timer = document.getElementById('timer');
 
 let keys = document.getElementsByClassName('key');
 Array.from(keys).forEach(el => {
@@ -43,6 +44,8 @@ function createSession() {
             console.log('tries left: ' + loop);
             if(loop === 0) {
                 clearTimeout(timerID)
+                document.getElementById('time').innerHTML = timer.innerHTML;
+                document.getElementById('scoreDialog').showModal();
                 document.getElementById('enter').style.pointerEvents = "none";
                 document.getElementById('delete').style.pointerEvents = "none";
                 return;
@@ -59,10 +62,6 @@ let sec = 0;
 let min = 0;
 let timerID;
 function startTimer() {
-    console.log(sec)
-
-    let timer = document.getElementById('timer');
-
     if(sec > 59) {
         sec = 0;
         min++;
@@ -73,7 +72,6 @@ function startTimer() {
     } else {
         timer.innerHTML = min + ':' + sec;
     }
-
     
     sec++;
     timerID = setTimeout(startTimer, 1000);

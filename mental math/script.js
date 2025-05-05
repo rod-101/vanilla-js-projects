@@ -58,7 +58,7 @@ function handleEnterClick() {
             document.getElementById('time').innerHTML = timer.innerHTML;
             enterKey.style.pointerEvents = "none";
             deleteKey.style.pointerEvents = "none";
-            sec = 0;
+            counter = 0;
             min = 0;
             headContainer.innerHTML = "";
             
@@ -74,18 +74,26 @@ function handleEnterClick() {
 
 document.getElementById('enter').addEventListener('click', handleEnterClick)
 
+let counter = 0;
 function startTimer() {
-    if(sec > 59) {
-        sec = 0;
-        min++;
+    
+    if (counter < 60) {
+        sec = counter;
+    } else {
+        sec = counter % 60;
     }
 
+    if(counter % 60 == 0){
+        min = counter / 60;
+    }
+
+    //format of timer on screen
     if(sec < 10) {
         timer.innerHTML = min + ':' + '0' + sec;
     } else {
         timer.innerHTML = min + ':' + sec;
     }
     
-    sec++;
+    counter++;
     timerID = setTimeout(startTimer, 1000);
 }

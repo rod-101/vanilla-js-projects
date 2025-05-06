@@ -1,12 +1,16 @@
 let loop = 0;
 let sec = 0;
 let min = 0;
+let counter = -1;
 let timerID;
 let headContainer = document.getElementById('head-container');
 let timer = document.getElementById('timer');
 let keys = document.getElementsByClassName('key');
 let enterKey = document.getElementById("enter");
 let deleteKey = document.getElementById("delete");
+let bestTime = 0; //stored as integer for simple comparison
+let bestTimeContainer = document.getElementById('bestTimeContainer');
+document.getElementById('enter').addEventListener('click', handleEnterClick)
 
 document.addEventListener("DOMContentLoaded", function () {
     enterKey.style.pointerEvents = "none"
@@ -57,13 +61,12 @@ function handleEnterClick() {
             enterKey.style.pointerEvents = "none";
             deleteKey.style.pointerEvents = "none";
             clearTimeout(timerID);
-            console.log("counter inside loop: " + counter);
             recordBestTime();
             document.getElementById('time').innerHTML = timer.innerHTML;
             counter = 0;
             min = 0;
+            sec = 0;
             headContainer.innerHTML = "";
-            
             document.getElementById('scoreDialog').showModal();                
             return;
         }
@@ -74,62 +77,69 @@ function handleEnterClick() {
     }
 }
 
-document.getElementById('enter').addEventListener('click', handleEnterClick)
-
-let counter = 0;
-function startTimer() {
-    //calculation of time
-    if (counter < 60) {
-        sec = counter;
+function calculateSeconds(i) {
+    let secs = 0;
+    if (i < 60) {
+        secs = i;
     } else {
-        sec = counter % 60;
-    }
-    if(counter % 60 == 0){
-        min = counter / 60;
-    }
+        secs = i % 60;
+    }    
+    return secs;
+}
 
-    //format of timer on screen
+function calculateMinutes(i) {
+    let mins = 0;
+    if(i % 60 == 0){
+        mins = i / 60;
+    }
+    return mins;
+}
+
+function formatTimeAndDisplayTimer() {
     if(sec < 10) {
         timer.innerHTML = min + ':' + '0' + sec;
     } else {
         timer.innerHTML = min + ':' + sec;
     }
-    
+}
+
+function formatTimeAndDisplayBestTime(seconds, minutes) {
+    if(seconds < 10) {
+        bestTimeContainer.innerHTML = `${minutes}:0${seconds}`;
+    } else {
+        bestTimeContainer.innerHTML = `${minutes}:${seconds}`;
+    }
+}
+
+function startTimer() {
     counter++;
+    sec = calculateSeconds(counter);
+    min = calculateMinutes(counter);
+    formatTimeAndDisplayTimer();
     timerID = setTimeout(startTimer, 1000);
 }
 
-let bestTime = 0;
-let bestTimeContainer = document.getElementById('bestTime');
 function recordBestTime() {
     let seconds = 0;
     let minutes = 0;
-    console.log("counter inside function: " + counter);
-    let time = counter;
 
-    if(bestTime == 0) {
-        bestTimeContainer.innerHTML = `${time}`
-        bestTime = time;
-    } else {
-        if(time < bestTime) { //there is a problem here
-            bestTime = time;
+    //if there is previous record of bestTime
+    if(bestTime > 0){
+        if(counter < bestTime) {
+            bestTime = counter;
         }
-    
-        //formatting the best time to be displayed on the dialog
-        if (bestTime < 60) {
-            seconds = bestTime;
-        } else {
-            seconds = bestTime % 60;
-        }
-        if(bestTime % 60 == 0){
-            minutes = bestTime / 60;
-        }
-
-        //format of best time on screen
-        if(seconds < 10) {
-            bestTimeContainer.innerHTML = minutes + ':' + '0' + seconds;
-        } else {
-            bestTimeContainer.innerHTML = minutes + ':' + seconds;
-        }        
+        seconds = calculateSeconds(bestTime);
+        minutes = calculateMinutes(bestTime);
+        formatTimeAndDisplayBestTime(seconds, minutes);        
     }
+    
+    //if no previous record of bestTime
+    if(bestTime === 0) {
+        if(sec < 10) {
+            bestTimeContainer.innerHTML = `${min}:0${sec}`;
+        } else {
+            bestTimeContainer.innerHTML = `${min}:${sec}`;
+        }
+        bestTime = counter;
+    }     
 }

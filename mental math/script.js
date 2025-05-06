@@ -8,8 +8,8 @@ let timer = document.getElementById('timer');
 let keys = document.getElementsByClassName('key');
 let enterKey = document.getElementById("enter");
 let deleteKey = document.getElementById("delete");
-let bestTime = 0; //stored as integer for simple comparison
 let bestTimeContainer = document.getElementById('bestTimeContainer');
+let newRecord = document.getElementById('newRecord');
 document.getElementById('enter').addEventListener('click', handleEnterClick)
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -43,6 +43,7 @@ function createOneDigitProblem(loop) {
 }
 
 function createSession() {
+    newRecord.innerHTML = "";
     loop = 5;
     startTimer();
     //enable and disable rightful keys
@@ -122,24 +123,28 @@ function startTimer() {
 function recordBestTime() {
     let seconds = 0;
     let minutes = 0;
+    let bestTime = parseInt(getBestTime());
+    let bestTimeParentContainer = document.getElementById('bestTimeParentContainer')
 
-    //if there is previous record of bestTime
-    if(bestTime > 0){
+    if (bestTime === 0) {
+        newRecord.innerHTML = "New record!"
+        bestTimeParentContainer.innerHTML = "";
+        setBestTime(counter);
+    } else if(bestTime > 0){
         if(counter < bestTime) {
-            bestTime = counter;
+            setBestTime(counter);            
+            newRecord.innerHTML = "New record!"
         }
+        bestTime = parseInt(getBestTime());
         seconds = calculateSeconds(bestTime);
         minutes = calculateMinutes(bestTime);
-        formatTimeAndDisplayBestTime(seconds, minutes);        
+        formatTimeAndDisplayBestTime(seconds, minutes);  
     }
-    
-    //if no previous record of bestTime
-    if(bestTime === 0) {
-        if(sec < 10) {
-            bestTimeContainer.innerHTML = `${min}:0${sec}`;
-        } else {
-            bestTimeContainer.innerHTML = `${min}:${sec}`;
-        }
-        bestTime = counter;
-    }     
+}
+
+function getBestTime() {
+    return localStorage.getItem("bestTime") || 0;
+}
+function setBestTime(val) {
+    localStorage.setItem("bestTime", val)
 }
